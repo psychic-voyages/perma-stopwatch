@@ -4,7 +4,7 @@ Project uses PostgreSQL, Node, Vite.
 2. `cd ./perma-stopwatch`
 3. Run the commands:
   - `createdb perma_stopwatch`
-  - `echo "DATABASE_URL=http://localhost:5432/perma_stopwatch\nVITE_API_URL=http://localhost:2222/api" > .env`
+  - `echo -e "DATABASE_URL=http://localhost:5432/perma_stopwatch\nVITE_API_URL=http://localhost:2222/api" > .env`
     - This step assumes you have `trust` set on local hosts, adapt to authentication required by your machine
   - `npm i`
   - `npm run db:init`
