@@ -100,47 +100,6 @@ apiRouter.patch("/stopwatch/:id/pause", async (req, res, next) => {
     }
 })
 
-// apiRouter.patch("/stopwatch/:id/pause", async (req, res, next) => {
-//     const { id } = req.params;
-//     const { timestamp } = req.body;
-    
-//     try {
-//         const { rows: [pauseStamp] } = await db.query(`
-//             SELECT * FROM timer_pause
-//             WHERE "tsId"=$1 AND "pauseEnd" IS NULL;
-//         `, [id]);
-    
-//         if (!pauseStamp) {
-//             await db.query(`
-//                 INSERT INTO timer_pause
-//                 ("tsId", "pauseStart")
-//                 VALUES ($1, $2);
-//             `, [id, timestamp]);
-
-//             await db.query(`
-//                 UPDATE timers
-//                 SET "paused"=TRUE
-//                 WHERE id=$1;
-//             `, [id]);
-//         } else {
-//             await db.query(`
-//                 UPDATE timer_pause
-//                 SET "pauseEnd"=$1
-//                 WHERE "tsId"=$2 AND "pauseEnd" IS NULL;
-//             `, [timestamp, id]);
-//             await db.query(`
-//                 UPDATE timers
-//                 SET "paused"=FALSE
-//                 WHERE id=$1;
-//             `, [id]);
-//         }
-        
-//         res.send({success: true});
-//     } catch (err) {
-//         next(err);
-//     }
-// })
-
 apiRouter.delete("/stopwatch/:id", async (req, res, next) => {
     try {
         const { id } = req.params;
