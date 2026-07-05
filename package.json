@@ -5,12 +5,13 @@
   "type": "module",
   "proxy": "http://localhost:2222",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "client:dev": "vite",
+    "client:build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "server:dev": "node --watch --env-file=.env server.js",
-    "server": "node --env-file=.env server.js"
+    "server": "node --env-file=.env server.js",
+    "db:init": "psql -f ./server/db/schema.sql"
   },
   "dependencies": {
     "cors": "^2.8.6",
