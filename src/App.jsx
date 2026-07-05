@@ -27,7 +27,7 @@ function App() {
     const fields = {name};
     if (startTime) fields.startTime = startTime;
     else {
-      const nextTime = new Date(currentTime).toLocaleString();
+      const nextTime = new Date(currentTime).toISOString();
       fields.startTime = nextTime;
     }
     
@@ -58,19 +58,13 @@ function App() {
       const json = await rsp.json();
 
       setTimestamps(json.timestamps.map((ts) => {
+        // console.log(ts);
         const epoch = new Date(ts.startTime);
         let timestamp = epoch.getTime();
-        for (const ps of ts.pauseStamps){
-          const {pauseStart, pauseEnd} = ps;
-          const pStart = new Date(pauseStart).getTime();
-          
-          if (!pauseEnd) ts.lastPause = pStart;
-          else {
-            const pEnd = new Date(pauseEnd).getTime();
-            const secOverflow = pEnd-pStart;
-            timestamp+=secOverflow;
-          }
-        };
+        timestamp += +ts.totalPause;
+        if (ts.paused) {
+          ts.currentPauseMS = new Date(ts.currentPause).getTime();
+        }
         
         ts.epoch = epoch;
         ts.timestamp = timestamp;
@@ -107,11 +101,11 @@ function App() {
         {timestamps.sort((a,b) => a.id-b.id).map((ts, idx) => {
           let totalSecs = ts.timestamp;
           if (ts.paused) {
-            totalSecs += currentTime - ts.lastPause
+            totalSecs += currentTime - ts.currentPauseMS
           }
           totalSecs = currentTime - totalSecs;
           totalSecs = Math.floor(totalSecs/1000);
-          // totalSecs = Math.floor((currentTime-ts.timestamp)/1000);
+
           return (
             <li key={idx}>
               <h2>{ts.name}</h2>
@@ -119,7 +113,8 @@ function App() {
               <h3>{formatSeconds(totalSecs)}</h3>
               <div className="watch-controls">
                 <button onClick={async () => {
-                  const timestamp = new Date(currentTime).toLocaleString();
+                  const timestamp = new Date(currentTime).toISOString();
+
                   try {
                     const rsp = await fetch(`${api}/stopwatch/${ts.id}/pause`, {
                       method: "PATCH",
