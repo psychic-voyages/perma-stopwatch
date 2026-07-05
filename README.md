@@ -1,4 +1,4 @@
-Project uses PostgreSQL, Node, Vite.
+Project uses PostgreSQL, Express, React, Node, Vite.
 
 1. Clone the repo
 2. `cd ./perma-stopwatch`
